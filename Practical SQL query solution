@@ -1,12 +1,12 @@
-# FoodYum Sales Analysis
-
+FoodYum Sales Analysis
 This project contains SQL queries to analyze FoodYum's grocery store data for effective decision-making.
 
-## Tasks and Queries
+Here is the regular version of the SQL analysis for FoodYum:
 
-### Task 1: Missing `year_added` Count
-Query:
-```sql
+Task 1: Missing year_added Count
+
+The query below identifies how many products have a missing year_added value.
+
 SELECT COUNT(*) AS missing_year
 FROM products
 WHERE year_added IS NULL;
@@ -18,7 +18,7 @@ missing_year
 
 Task 2: Data Cleaning Query
 
-Query:
+The query below ensures that all product data matches the required criteria, including replacing missing values and ensuring correct formatting.
 
 SELECT
     product_id,
@@ -36,7 +36,7 @@ FROM products;
 
 Task 3: Price Range by Product Type
 
-Query:
+To determine the minimum and maximum price for each product type, use the following query:
 
 SELECT product_type,
        MIN(price) AS min_price,
@@ -47,15 +47,15 @@ GROUP BY product_type;
 Result:
 
 product_type	min_price	max_price
-Snacks	        5.20	        10.72
-Produce	        3.46	        8.78
-Dairy	        8.33	        13.97
-Bakery	        6.26	        11.88
-Meat	        11.48	        16.98
+Snacks	        5.20	    10.72
+Produce	        3.46	     8.78
+Dairy	        8.33	    13.97
+Bakery	        6.26	    11.88
+Meat	        11.48	    16.98
 
 Task 4: High-Selling Meat and Dairy Products
 
-Query:
+To find the meat and dairy products with average units sold greater than 10, use the following query:
 
 SELECT product_id, price, average_units_sold
 FROM products 
@@ -68,4 +68,3 @@ product_id	price	average_units_sold
 6	16.20	24
 8	15.77	28
 …	…	…
-
