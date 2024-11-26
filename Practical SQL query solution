@@ -47,11 +47,11 @@ GROUP BY product_type;
 Result:
 
 product_type	min_price	max_price
-Snacks	5.20	10.72
-Produce	3.46	8.78
-Dairy	8.33	13.97
-Bakery	6.26	11.88
-Meat	11.48	16.98
+Snacks	        5.20	        10.72
+Produce	        3.46	        8.78
+Dairy	        8.33	        13.97
+Bakery	        6.26	        11.88
+Meat	        11.48	        16.98
 
 Task 4: High-Selling Meat and Dairy Products
 
@@ -69,65 +69,3 @@ product_id	price	average_units_sold
 8	15.77	28
 …	…	…
 
-Dataset
-
-The dataset products contains the following columns:
-	•	product_id: Unique identifier of the product.
-	•	product_type: Product category.
-	•	brand: Brand name.
-	•	weight: Product weight in grams.
-	•	price: Product price in USD.
-	•	average_units_sold: Monthly average units sold.
-	•	year_added: Year the product was added.
-	•	stock_location: Stock’s origin location.
-
-How to Use
-
-	1.	Clone this repository:
-
-git clone https://github.com/your-username/foodyum-sales-analysis.git
-
-
-	2.	Open sales_analysis.sql in your SQL editor to execute queries.
-	3.	Review results documented in README.md.
-
-**`sales_analysis.sql`**:
-```sql
--- Task 1: Missing year_added count
-SELECT COUNT(*) AS missing_year
-FROM products
-WHERE year_added IS NULL;
-
--- Task 2: Data Cleaning
-SELECT
-    product_id,
-    COALESCE(product_type, 'Unknown') AS product_type,
-    COALESCE(NULLIF(REPLACE(brand, '-', ''), ''), 'Unknown') AS brand,
-    COALESCE(ROUND(CAST(REGEXP_REPLACE(weight, '[^\d.]', '', 'g') AS DECIMAL(10, 2)), 2), ROUND((SELECT PERCENTILE_DISC(0.5) WITHIN GROUP (ORDER BY CAST(REGEXP_REPLACE(weight, '[^\d.]', '', 'g') AS DECIMAL(10, 2))) FROM products), 2)) AS weight,
-    COALESCE(
-        TO_CHAR(CAST(price AS DECIMAL(10, 2)), '9999999999.99'),
-        TO_CHAR(CAST((SELECT PERCENTILE_DISC(0.5) WITHIN GROUP (ORDER BY price) FROM products) AS DECIMAL(10, 2)), '9999999999.99')
-    ) AS price,
-    COALESCE(average_units_sold, 0) AS average_units_sold,
-    COALESCE(year_added, 2022) AS year_added,
-    COALESCE(UPPER(stock_location), 'Unknown') AS stock_location
-FROM products;
-
--- Task 3: Price range by product type
-SELECT product_type,
-       MIN(price) AS min_price,
-       MAX(price) AS max_price
-FROM products 
-GROUP BY product_type;
-
--- Task 4: High-selling Meat and Dairy products
-SELECT product_id, price, average_units_sold
-FROM products 
-WHERE product_type IN ('Meat', 'Dairy')
-      AND average_units_sold > 10;
-
-	4.	Push your changes to GitHub:
-
-git add .
-git commit -m "Add FoodYum sales analysis tasks"
-git push origin main
